@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -16,6 +16,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NerdStore.Vendas.Application\NerdStore.Vendas.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pedidos\" />
   </ItemGroup>
 
 </Project>

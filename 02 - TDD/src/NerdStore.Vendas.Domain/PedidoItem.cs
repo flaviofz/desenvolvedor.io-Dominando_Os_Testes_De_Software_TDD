@@ -1,5 +1,4 @@
 ﻿using System;
-using NerdStore.Core.DomainObjects;
 
 namespace NerdStore.Vendas.Domain
 {
@@ -12,8 +11,6 @@ namespace NerdStore.Vendas.Domain
 
         public PedidoItem(Guid produtoId, string produtoNome, int quantidade, decimal valorUnitario)
         {
-            if (quantidade < Pedido.MIN_UNIDADES_ITEM) throw new DomainException($"Mínimo de {Pedido.MIN_UNIDADES_ITEM} unidades por produto");
-
             ProdutoId = produtoId;
             ProdutoNome = produtoNome;
             Quantidade = quantidade;
@@ -25,9 +22,6 @@ namespace NerdStore.Vendas.Domain
             Quantidade += unidades;
         }
 
-        internal decimal CalcularValor()
-        {
-            return Quantidade * ValorUnitario;
-        }
+        internal decimal CalcularValor() => Quantidade * ValorUnitario;
     }
 }
