@@ -27,13 +27,17 @@ namespace NerdStore.Vendas.Application.Tests.Pedidos
             var mocker = new AutoMocker();
             var pedidoHandler = mocker.CreateInstance<PedidoCommandHandler>();
 
+            mocker.GetMock<IPedidoRepository>()
+                .Setup(x => x.UnitOfWork.Commit()).Returns(Task.FromResult(true));
+
             // Act
             var result = await pedidoHandler.Handle(pedidoCommand, CancellationToken.None);
 
             // Assert
             Assert.True(result);
             mocker.GetMock<IPedidoRepository>().Verify(x => x.Adicionar(It.IsAny<Pedido>()), Times.Once);
-            mocker.GetMock<IMediator>().Verify(x => x.Publish(It.IsAny<INotification>(), CancellationToken.None), Times.Once);
+            mocker.GetMock<IPedidoRepository>().Verify(x => x.UnitOfWork.Commit(), Times.Once);
+            //mocker.GetMock<IMediator>().Verify(x => x.Publish(It.IsAny<INotification>(), CancellationToken.None), Times.Once);
         }
     }
 }
