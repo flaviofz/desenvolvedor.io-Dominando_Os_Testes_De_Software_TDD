@@ -6,7 +6,7 @@ namespace NerdStore.Vendas.Domain.Tests
 {
     public class VoucherTests
     {
-        [Fact(DisplayName = "Validar voucher tipo valor válido")]
+        [Fact(DisplayName = "Validar Voucher Tipo Valor Válido")]
         [Trait("Categoria", "Vendas - Voucher")]
         public void Voucher_ValidarVoucherTipoValor_DeveEstarValido()
         {
@@ -48,7 +48,7 @@ namespace NerdStore.Vendas.Domain.Tests
         public void Voucher_ValidarVoucherPorcentagem_DeveEstarValido()
         {
             var voucher = new Voucher("PROMO-15-OFF", 15, null, 1,
-                TipoDescontoVoucher.Percentual, DateTime.Now.AddDays(15), true, false);
+                TipoDescontoVoucher.Porcentagem, DateTime.Now.AddDays(15), true, false);
 
             // Act
             var result = voucher.ValidarSeAplicavel();
@@ -62,7 +62,7 @@ namespace NerdStore.Vendas.Domain.Tests
         public void Voucher_ValidarVoucherPorcentagem_DeveEstarInvalido()
         {
             var voucher = new Voucher("", null, null, 0,
-                TipoDescontoVoucher.Percentual, DateTime.Now.AddDays(-1), false, true);
+                TipoDescontoVoucher.Porcentagem, DateTime.Now.AddDays(-1), false, true);
 
             // Act
             var result = voucher.ValidarSeAplicavel();

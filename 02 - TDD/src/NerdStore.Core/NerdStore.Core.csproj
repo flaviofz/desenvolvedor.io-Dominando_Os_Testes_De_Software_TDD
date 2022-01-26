@@ -1,12 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="fluentvalidation" Version="10.3.6" />
-    <PackageReference Include="Mediatr" Version="10.0.1" />
+    <Folder Include="Messages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="fluentvalidation" Version="8.4.0" />
+    <PackageReference Include="mediatr" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
