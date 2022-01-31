@@ -1,8 +1,5 @@
 ﻿using NerdStore.WebApp.MVC;
 using NerdStore.WebApp.Tests.Config;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NerdStore.WebApp.Tests
 {

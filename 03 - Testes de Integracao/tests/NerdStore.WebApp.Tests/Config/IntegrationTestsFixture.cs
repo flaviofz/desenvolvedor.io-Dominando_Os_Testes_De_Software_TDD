@@ -28,6 +28,10 @@ namespace NerdStore.WebApp.Tests.Config
             Client = Factory.CreateClient(clientOptions);
         }
 
-        public void Dispose() { }
+        public void Dispose() 
+        {
+            Client.Dispose();
+            Factory.Dispose();
+        }
     }
 }

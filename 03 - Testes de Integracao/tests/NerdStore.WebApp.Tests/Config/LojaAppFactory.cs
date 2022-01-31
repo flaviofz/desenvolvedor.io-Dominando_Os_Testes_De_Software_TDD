@@ -7,7 +7,7 @@ namespace NerdStore.WebApp.Tests.Config
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            // irá utilizar a startup que for enviada no momento da criação
+            // Irá utilizar a startup que for enviada no momento da criação
             builder.UseStartup<TStartup>();
 
             // Irá buscar o appsettings do testing
