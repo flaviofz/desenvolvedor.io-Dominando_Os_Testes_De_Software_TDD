@@ -2,6 +2,7 @@
 using NerdStore.WebApp.Tests.Config;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NerdStore.WebApp.Tests
@@ -16,22 +17,25 @@ namespace NerdStore.WebApp.Tests
             _testsFixture = testsFixture;
         }
 
-        [Fact(DisplayName = "Relizar cadastro com sucesso")]
+        [Fact(DisplayName = "Realizar cadastro com sucesso")]
         [Trait("Categoria", "Integração Web - Usuário")]
-        public async void Usuario_RealizarCadastro_DeveExecutarComSucesso()
+        public async Task Usuario_RealizarCadastro_DeveExecutarComSucesso()
         {
             // Arrange
             var url = "/Identity/Account/Register";
             var initialResponse = await _testsFixture.Client.GetAsync(url);
             initialResponse.EnsureSuccessStatusCode();
 
-            var email = "teste@teste.com";
+            var antiForgeryToken = _testsFixture.ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+
+            _testsFixture.GerarUserSenha();
 
             var formData = new Dictionary<string, string>
             {
-                { "Input.Email",            email },
-                { "Input.Password",         "Teste@123" },
-                { "Input.ConfirmPassword",  "Teste@123" }
+                { _testsFixture.AntiForgeryFieldName,   antiForgeryToken },
+                { "Input.Email",                        _testsFixture.UsuarioEmail },
+                { "Input.Password",                     _testsFixture.UsuarioSenha },
+                { "Input.ConfirmPassword",              _testsFixture.UsuarioSenha }
             };
 
             var postRequest = new HttpRequestMessage(HttpMethod.Post, url)
@@ -43,10 +47,10 @@ namespace NerdStore.WebApp.Tests
             var postResponse = await _testsFixture.Client.SendAsync(postRequest);
 
             // Assert
-            var responseString = await postRequest.Content.ReadAsStringAsync();
+            var responseString = await postResponse.Content.ReadAsStringAsync();
 
             postResponse.EnsureSuccessStatusCode();
-            Assert.Contains($"Hello {email}!", responseString);
+            Assert.Contains($"Hello {_testsFixture.UsuarioEmail}!", responseString);
         }
     }
 }
