@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using NerdStore.WebApp.MVC;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NerdStore.WebApp.Tests.Config
@@ -28,13 +30,37 @@ namespace NerdStore.WebApp.Tests.Config
         {
             var clientOptions = new WebApplicationFactoryClientOptions
             {
-
+                AllowAutoRedirect = true,                   // Permitir redirecionamentos
+                BaseAddress = new Uri("http://localhost"),  // Onde está rodando a aplicação
+                HandleCookies = true,                       // Guardar os cookies
+                MaxAutomaticRedirections = 7                // Evitar loop de redirecionamentos
             };
 
             Factory = new LojaAppFactory<TStartup>();
             Client = Factory.CreateClient(clientOptions);
         }
 
+        public async Task RealizarLoginWeb()
+        {
+            var initialResponse = await Client.GetAsync($"/Identity/Account/Login");
+            initialResponse.EnsureSuccessStatusCode();
+
+            var antiForgeryToken = ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+
+            var formData = new Dictionary<string, string>
+            {
+                { AntiForgeryFieldName,   antiForgeryToken },
+                { "Input.Email",          "teste@teste.com" },
+                { "Input.Password",       "Teste@123" }
+            };
+
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/Identity/Account/Login")
+            {
+                Content = new FormUrlEncodedContent(formData)
+            };
+
+            await Client.SendAsync(postRequest);
+        }
 
         public void GerarUserSenha()
         {
