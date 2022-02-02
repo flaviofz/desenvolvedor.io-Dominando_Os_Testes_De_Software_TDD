@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NerdStore.WebApp.MVC;
+using NerdStore.WebApp.MVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -23,6 +24,8 @@ namespace NerdStore.WebApp.Tests.Config
         public string UsuarioEmail;
         public string UsuarioSenha;
 
+        public string UsuarioToken;
+
         public readonly LojaAppFactory<TStartup> Factory;
         public HttpClient Client;
 
@@ -38,6 +41,23 @@ namespace NerdStore.WebApp.Tests.Config
 
             Factory = new LojaAppFactory<TStartup>();
             Client = Factory.CreateClient(clientOptions);
+        }
+
+        public async Task RealizarLoginApi()
+        {
+            var userData = new LoginViewModel
+            {
+                Email = "teste@teste.com",
+                Senha = "Teste@123"
+            };
+
+            // Recriando o client para evitar configurações de web
+            Client = Factory.CreateClient();
+            
+            var response = await Client.PostAsJsonAsync("api/login", userData);
+            response.EnsureSuccessStatusCode();
+
+            UsuarioToken = await response.Content.ReadAsStringAsync();
         }
 
         public async Task RealizarLoginWeb()
